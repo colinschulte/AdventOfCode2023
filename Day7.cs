@@ -15,13 +15,6 @@ public class Day7
         list.Add(new List<string>());
         list.Add(new List<string>());
         list.Add(new List<string>());
-        //List<string> fiveAKind = new List<string>();
-        //List<string> fourAKind = new List<string>();
-        //List<string> fullHouse = new List<string>();
-        //List<string> threeAKind = new List<string>();
-        //List<string> twoPair = new List<string>();
-        //List<string> onePair = new List<string>();
-        //List<string> highCard = new List<string>();
         string order = "J23456789TQKA";
         int topHandCount = 0;
         int secondHandCount = 0;

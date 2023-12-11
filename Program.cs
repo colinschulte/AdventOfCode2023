@@ -1,3 +1,3 @@
 ﻿using System.Xml;
 
-Day7.Solution();
+Day10.Solution();
