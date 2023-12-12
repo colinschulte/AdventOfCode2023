@@ -149,23 +149,57 @@ public class Day10
         }
         Console.WriteLine(loopCount / 2);
 
-        string[] newMap = new string[140];
-        for(int i = 0; i < input.Length; i++)
+        string[] newMap = new string[280];
+        for(int i = 0; i < (input.Length * 2); i++)
         {
-            newMap[i] = "............................................................................................................................................";
+            newMap[i] = "........................................................................................................................................................................................................................................................................................";
         }
         foreach((int, int) tuple in tupList)
         {
-            string newLine = newMap[tuple.Item1];
+            string newLine = newMap[tuple.Item1 * 2];
             char[] brokenLine = newLine.ToCharArray();
-            brokenLine[tuple.Item2] = input[tuple.Item1][tuple.Item2];
+            brokenLine[tuple.Item2 * 2] = input[tuple.Item1][tuple.Item2];
             newLine = new string(brokenLine);
-            newMap[tuple.Item1] = newLine;
+            newMap[tuple.Item1 * 2] = newLine;
         }
-        //foreach(string line in newMap)
-        //{
-        //    Console.WriteLine(line);
-        //}
+        int lineCount = 0;
+        int charCount = 0;
+        foreach(string line in newMap)
+        {
+            char[] brokenLine = line.ToCharArray();
+            if (lineCount % 2 == 1)
+            {
+                foreach (char c in brokenLine)
+                {
+                    if(lineCount > 0)
+                    {
+                        if (newMap[lineCount - 1][charCount] == '|' || newMap[lineCount - 1][charCount] == 'F' || newMap[lineCount - 1][charCount] == '7')
+                        {
+                            brokenLine[charCount] = '|';
+                        }
+                    }
+                    charCount++;
+                }
+            }
+            else
+            {
+                foreach (char c in brokenLine)
+                {
+                    if (charCount > 0)
+                    {
+                        if (newMap[lineCount][charCount - 1] == '-' || newMap[lineCount][charCount - 1] == 'L' || newMap[lineCount][charCount - 1] == 'F')
+                        {
+                            brokenLine[charCount] = '-';
+                        }
+                    }
+                    charCount++;
+                }
+            }
+            newMap[lineCount] = new string(brokenLine);
+            Console.WriteLine(newMap[lineCount]);
+            lineCount++;
+            charCount = 0;
+        }
         List<(int, int)> outerCoords = new List<(int, int)>();
         List<(int, int)> coordsToCheck = new List<(int, int)>();
         (int, int) currentCoords = (0, 0);
@@ -176,7 +210,7 @@ public class Day10
         while (coordsToCheck.Count > 0)
         {
             currentCoords = coordsToCheck[0];
-            Console.WriteLine(currentCoords);
+            //Console.WriteLine(currentCoords);
             if(currentCoords.Item1 > 0)
             {
                 if (newMap[currentCoords.Item1 - 1][currentCoords.Item2] == '.' && !outerCoords.Contains((currentCoords.Item1 - 1, currentCoords.Item2)))
@@ -245,14 +279,37 @@ public class Day10
                 }
             }
             //Console.WriteLine(outerCoords.Count);
-            foreach (var coords in outerCoords)
-            {
-                //Console.WriteLine(coords);
-            }
             coordsToCheck.Remove(currentCoords);
         }
-        Console.WriteLine(outerCoords.Count);
-        int finalAnswer = (140 * 140) - outerCoords.Count - loopCount;
-        Console.WriteLine(finalAnswer);
+        foreach (var coords in outerCoords)
+        {
+            //Console.WriteLine(coords);
+            char[] brokenLine = newMap[coords.Item1].ToCharArray();
+            brokenLine[coords.Item2] = '*';
+            newMap[coords.Item1] = new string(brokenLine);
+        }
+        lineCount = 0;
+        charCount = 0;
+        int dotCount = 0;
+        foreach (string line in newMap)
+        {
+            if (lineCount % 2 == 0)
+            {
+                foreach(char c in line)
+                {
+                    if (charCount % 2 == 0 && c == '.') 
+                    {
+                        dotCount++;
+                    }
+                    charCount++;
+                }
+            }
+            lineCount++;
+            charCount = 0;
+        }
+        //Console.WriteLine(outerCoords.Count);
+        //int finalAnswer = (140 * 140) - outerCoords.Count - loopCount;
+        //Console.WriteLine(finalAnswer);
+        Console.WriteLine(dotCount);
     }
 }
